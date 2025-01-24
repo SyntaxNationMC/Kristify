@@ -12,8 +12,7 @@ if fs.exists(versionPath) then
 end
 
 -- Check upstream version
-local authenticate = _G._GIT_API_KEY and { Authorization = "Bearer " .. _G._GIT_API_KEY }
-local gitAPI = http.get("https://raw.githubusercontent.com/Kristify/Kristify/main/src/version.txt", authenticate)
+local gitAPI = http.get("https://gitbucket.fso.ovh/fasolo97/Kristify/raw/main/src/version.txt")
 
 if gitAPI then
   local upstreamVersion = gitAPI.readAll()
@@ -187,9 +186,7 @@ elseif args[1] == "--update" or args[1] == "-u" then
     error("Holdup. How- eh whatever. You need the http API!")
   end
 
-  local authenticate = _G._GIT_API_KEY and { Authorization = "Bearer " .. _G._GIT_API_KEY }
-  local response, err, errResp = http.get("https://raw.githubusercontent.com/Kristify/kristify/main/installer.lua",
-    authenticate)
+  local response, err, errResp = http.get("https://gitbucket.fso.ovh/fasolo97/Kristify/raw/main/installer.lua")
 
   if not response then
     error("Couldn't get the install script! Reason: \'" .. err .. "\' (code " .. errResp.getResponseCode() .. ')')
