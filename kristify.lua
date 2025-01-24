@@ -12,7 +12,7 @@ if fs.exists(versionPath) then
 end
 
 -- Check upstream version
-local gitAPI = http.get("https://gitbucket.fso.ovh/fasolo97/Kristify/raw/main/src/version.txt")
+local gitAPI = http.get("https://gitbucket.fso.ovh/SyntaxNation/Kristify/raw/main/src/version.txt")
 
 if gitAPI then
   local upstreamVersion = gitAPI.readAll()
@@ -108,7 +108,7 @@ if args[1] == "--theme" or args[1] == "-t" then
     end
 
     local function generateTree(name)
-      sURL = "https://gitbucket.fso.ovh/fasolo97/Kristify/raw/main"
+      sURL = "https://gitbucket.fso.ovh/SyntaxNation/Kristify/raw/main"
       local tTree = filePaths
 
       return tTree
@@ -148,7 +148,7 @@ elseif args[1] == "--update" or args[1] == "-u" then
     error("Holdup. How- eh whatever. You need the http API!")
   end
 
-  local response, err, errResp = http.get("https://gitbucket.fso.ovh/fasolo97/Kristify/raw/main/installer.lua")
+  local response, err, errResp = http.get("https://gitbucket.fso.ovh/SyntaxNation/Kristify/raw/main/installer.lua")
 
   if not response then
     error("Couldn't get the install script! Reason: \'" .. err .. "\' (code " .. errResp.getResponseCode() .. ')')

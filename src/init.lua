@@ -92,7 +92,7 @@ local function init()
   local basalt = {}
   if not fs.exists(fs.combine(ctx.path.src, "lib", "basalt")) then
     local basaltDL, err, errCode = http.get(
-      "https://gitbucket.fso.ovh/fasolo97/Kristify/raw/main/src/libs/basalt.lua")
+      "https://gitbucket.fso.ovh/SyntaxNation/Kristify/raw/main/src/libs/basalt.lua")
     if not basaltDL then
       ctx.logger:error("Couldn't load Basalt into memory! Reason: \'" ..
         err .. "\' (code " .. errCode.getResponseCode() .. ')')
