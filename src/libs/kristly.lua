@@ -6,7 +6,7 @@ local expect = require "cc.expect".expect
 
 local kristly = {}
 local kristlyWS = { ws = nil, id = 0 }
-local syncNode = settings.get("kristly.node") or "https://krist.dev/" -- ~~Secret~~ setting to change node
+local syncNode = settings.get("kristly.node") or "https://crypticore.fso.ovh/" -- ~~Secret~~ setting to change node
 
 --#region Utilities
 
