@@ -1,5 +1,5 @@
 local installation = settings.get("kristify.path") or "kristify"
-local owner, themeRepo = "kristify", "themes"
+local owner, themeRepo = "fasolo97", "KristifyThemes"
 local args = { ... }
 
 -- Check installed version
@@ -71,8 +71,8 @@ if args[1] == "--theme" or args[1] == "-t" then
     print(name .. " by " .. author)
   else
     -- Change theme
-
-    local file = http.get(("https://raw.githubusercontent.com/%s/%s/main/%s/credits.json")
+    filePaths = { "/kristify.lua", "/data/config.example.lua", "/data/products.example.lua", "/src/libs/basalt.lua", "/src/libs/inv.lua", "/src/libs/kristly.lua", "/src/backend.lua", "/src/frontend.lua", "/src/init.lua", "/src/logger.lua", "/src/shopsync.lua", "/src/speaker.lua", "/src/utils.lua", "/src/version.txt", "/src/webhook.lua" }
+    local file = http.get(("https://gitbucket.fso.ovh/%s/%s/raw/main/%s/credits.json")
       :format(owner, themeRepo, args[2]))
 
     if not file then
@@ -108,58 +108,20 @@ if args[1] == "--theme" or args[1] == "-t" then
     end
 
     local function generateTree(name)
-      sURL = "https://api.github.com/repos/" .. owner .. '/' .. themeRepo .. "/contents/" .. name .. "?ref=main"
+      sURL = "https://gitbucket.fso.ovh/fasolo97/Kristify/raw/main"
+      local tTree = filePaths
 
-      local function convertItem(item)
-        if item.type == "file" then
-          return item.name, item.download_url
-        elseif item.type == "dir" then
-          return item.name, generateTree(item.url)
-        end
-      end
-
-      local response, sErr, errResponse = http.get(sURL, authenticate)
-      httpError(response, sErr, errResponse)
-
-      local tData = getJSON(response)
-      local tTree = {}
-
-      for _, v in pairs(tData) do
-        local sName, tItem = convertItem(v)
-        -- Filter stuff that is not needed
-        if not (sName:sub(1, 1) == '.' or sName:find(".md")) then
-          tTree[sName] = tItem
-        end
-      end
       return tTree
     end
 
-    local function downloadBlob(sURL, sPath)
-      local response, sErr, errResponse = http.get(sURL, authenticate)
-      if not httpError(response, sErr, errResponse) then
-        return false
-      end
-
-      local sData = response.readAll()
-      response.close()
-
-      local blobFile = fs.open(sPath, 'w')
-      blobFile.write(sData)
-      blobFile.close()
-
-      return true
-    end
-
     local theme = generateTree(name)
-    local function downloadItems(tree, sPath)
+    local function downloadItems(itemPath)
       sleep(0.3)
 
-      for treeItemName, item in pairs(tree) do
-        local nextPath = fs.combine(sPath, treeItemName)
+      for i=1, table.getn(filePaths) do
+        nextPath = fs.combine(sURL, filePaths[i])
         if type(item) == "table" then
           downloadItems(item, nextPath)
-        else
-          downloadBlob(item, nextPath)
         end
       end
     end

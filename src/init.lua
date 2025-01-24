@@ -91,10 +91,8 @@ local function init()
   -- Load Basalt
   local basalt = {}
   if not fs.exists(fs.combine(ctx.path.src, "lib", "basalt")) then
-    local authenticate = _G._GIT_API_KEY and { Authorization = "Bearer " .. _G._GIT_API_KEY }
     local basaltDL, err, errCode = http.get(
-      "https://raw.githubusercontent.com/Kristify/kristify/main/src/libs/basalt.lua"
-      , authenticate)
+      "https://gitbucket.fso.ovh/fasolo97/Kristify/raw/main/src/libs/basalt.lua")
     if not basaltDL then
       ctx.logger:error("Couldn't load Basalt into memory! Reason: \'" ..
         err .. "\' (code " .. errCode.getResponseCode() .. ')')
