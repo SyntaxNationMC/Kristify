@@ -31,7 +31,7 @@ if gitAPI then
 end
 
 -- Run Kristify normally
-if #args == 0 then
+if table.getn(args) == 0 then
   local initPath = fs.combine(installation, "src", "init.lua")
   if not fs.exists(initPath) then
     error("Kristify is not installed correctly!")

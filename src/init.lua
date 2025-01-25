@@ -131,7 +131,7 @@ local function init()
 
   configExpect("pkey", "string")
   if configExpect("name", "string") then
-    bAssert(ctx.utils.endsWith(ctx.config.name or "", ".kst"), "Remove \'.kst\' from the name.")
+    bAssert(ctx.utils.endsWith(ctx.config.name or "", ".co"), "Remove \'.co\' from the name.")
   end
   configExpect("webhooks", "table")
   configExpect("sounds", "table")
