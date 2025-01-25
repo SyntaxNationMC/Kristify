@@ -19,7 +19,7 @@ txModem.open(BROADCAST_CHANNEL)
 local txMsg = {
     type = "ShopSync",
     info = {
-        name = ctx.config.name .. ".kst",
+        name = ctx.config.name .. ".co",
         description = ctx.config.tagline,
         computerID = os.getComputerID(),
         multiShop = shopSync.multiShop,
@@ -60,8 +60,8 @@ function broadcastShopSync()
             prices = {
                 {
                     value = product.price,
-                    currency = "KST",
-                    address = product.metaname .. "@" .. ctx.config.name .. ".kst"
+                    currency = "CO",
+                    address = product.metaname .. "@" .. ctx.config.name .. ".co"
                 }
             },
             item = {

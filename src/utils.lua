@@ -57,7 +57,7 @@ end
 ---@return table meta A table with metadata
 ---@source k.lua
 function utils.parseCommonmeta(meta)
-  local domainMatch = "^([%l%d-_]*)@?([%l%d-]+).kst$"
+  local domainMatch = "^([%l%d-_]*)@?([%l%d-]+).co$"
   local commonMetaMatch = "^(.+)=(.+)$"
 
   local tbl = { meta = {} }
@@ -66,7 +66,7 @@ function utils.parseCommonmeta(meta)
     if m:match(domainMatch) then
       -- print("Matched domain")
 
-      local p1, p2 = m:match("([%l%d-_]*)@"), m:match("@?([%l%d-]+).kst")
+      local p1, p2 = m:match("([%l%d-_]*)@"), m:match("@?([%l%d-]+).co")
       tbl.name = p1
       tbl.domain = p2
 

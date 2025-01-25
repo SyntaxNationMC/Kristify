@@ -120,7 +120,7 @@ function kristlyEvent(data)
       local transaction = data.transaction
 
       if transaction.sent_name == config.name and transaction.sent_metaname ~= nil then
-        logger:info("Received transaction to: " .. transaction.sent_metaname .. "@" .. transaction.sent_name .. ".kst")
+        logger:info("Received transaction to: " .. transaction.sent_metaname .. "@" .. transaction.sent_name .. ".co")
 
         handleTransaction(transaction)
       elseif transaction.sent_name == config.name then
@@ -204,7 +204,7 @@ function handleTransaction(transaction)
   end
 
   local message = "Kristify: `" ..
-      transaction.from .. "` bought " .. amount .. "x " .. product.displayName .. " (" .. transaction.value .. "kst)"
+      transaction.from .. "` bought " .. amount .. "x " .. product.displayName .. " (" .. transaction.value .. "CO)"
 
   logger:debug("Running webhooks")
 

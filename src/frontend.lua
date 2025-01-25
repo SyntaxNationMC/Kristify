@@ -97,7 +97,7 @@ local function updateCatalog()
         -- Price
         local button = widget:getDeepObject("_price")
         local _, h = button:getSize()
-        local btnLabel = item.price .. "kst"
+        local btnLabel = item.price .. "CO"
         button
             :setText(btnLabel)
             :setSize(#btnLabel + 2, h)
@@ -106,7 +106,7 @@ local function updateCatalog()
         widget:onClick(function()
             local info = base:getDeepObject("_importantMSG")
             if info then
-                info:setText("Pay to "..item.metaname.."@"..ctx.config.name..".kst for a purchase!")
+                info:setText("Pay to "..item.metaname.."@"..ctx.config.name..".co for a purchase!")
                 speaker:play("click")
             end
         end)
@@ -189,7 +189,7 @@ end
 
 local msg = base:getDeepObject("_importantMSG")
 if msg then
-    msg:setText("Pay to <metaname>@"..ctx.config.name..".kst for a purchase!")
+    msg:setText("Pay to <metaname>@"..ctx.config.name..".co for a purchase!")
 end
 
 -- Subtitle scrolling/repositioning
