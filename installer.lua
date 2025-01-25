@@ -3,7 +3,9 @@ if not http then
   end
   print("Please wait...")
   
-  local authenticate = _G._GIT_API_KEY and {Authorization = "Bearer ".._G._GIT_API_KEY}
+  apiKey = settings.get("kristify.git_api_key", nil)
+  local authenticate = apiKey and {Authorization = "Bearer "..apiKey}
+  
   local basaltDL = http.get("https://raw.github.com/SyntaxNationMC/Kristify/main/src/libs/basalt.lua", authenticate)
   assert(basaltDL, "Couldn't load Basalt into memory!")
   local basaltFile = basaltDL.readAll()

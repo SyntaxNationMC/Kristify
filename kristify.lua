@@ -12,7 +12,8 @@ if fs.exists(versionPath) then
 end
 
 -- Check upstream version
-local authenticate = _G._GIT_API_KEY and { Authorization = "Bearer " .. _G._GIT_API_KEY }
+apiKey = settings.get("kristify.git_api_key", nil)
+local authenticate = apiKey and {Authorization = "Bearer "..apiKey}
 local gitAPI = http.get("https://raw.githubusercontent.com/SyntaxNationMC/Kristify/main/src/version.txt", authenticate)
 
 if gitAPI then
@@ -187,7 +188,8 @@ elseif args[1] == "--update" or args[1] == "-u" then
     error("Holdup. How- eh whatever. You need the http API!")
   end
 
-  local authenticate = _G._GIT_API_KEY and { Authorization = "Bearer " .. _G._GIT_API_KEY }
+  apiKey = settings.get("kristify.git_api_key", nil)
+  local authenticate = apiKey and {Authorization = "Bearer "..apiKey}
   local response, err, errResp = http.get("https://raw.githubusercontent.com/SyntaxNationMC/kristify/main/installer.lua",
     authenticate)
 
