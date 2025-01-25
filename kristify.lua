@@ -1,5 +1,5 @@
 local installation = settings.get("kristify.path") or "kristify"
-local owner, themeRepo = "fasolo97", "KristifyThemes"
+local owner, themeRepo = "kristify", "themes"
 local args = { ... }
 
 -- Check installed version
@@ -12,7 +12,8 @@ if fs.exists(versionPath) then
 end
 
 -- Check upstream version
-local gitAPI = http.get("https://gitbucket.fso.ovh/SyntaxNation/Kristify/raw/main/src/version.txt")
+local authenticate = _G._GIT_API_KEY and { Authorization = "Bearer " .. _G._GIT_API_KEY }
+local gitAPI = http.get("https://raw.githubusercontent.com/SyntaxNationMC/Kristify/main/src/version.txt", authenticate)
 
 if gitAPI then
   local upstreamVersion = gitAPI.readAll()
@@ -71,8 +72,8 @@ if args[1] == "--theme" or args[1] == "-t" then
     print(name .. " by " .. author)
   else
     -- Change theme
-    filePaths = { "/kristify.lua", "/data/config.example.lua", "/data/products.example.lua", "/src/libs/basalt.lua", "/src/libs/inv.lua", "/src/libs/kristly.lua", "/src/backend.lua", "/src/frontend.lua", "/src/init.lua", "/src/logger.lua", "/src/shopsync.lua", "/src/speaker.lua", "/src/utils.lua", "/src/version.txt", "/src/webhook.lua" }
-    local file = http.get(("https://gitbucket.fso.ovh/%s/%s/raw/main/%s/credits.json")
+
+    local file = http.get(("https://raw.githubusercontent.com/%s/%s/main/%s/credits.json")
       :format(owner, themeRepo, args[2]))
 
     if not file then
@@ -108,20 +109,58 @@ if args[1] == "--theme" or args[1] == "-t" then
     end
 
     local function generateTree(name)
-      sURL = "https://gitbucket.fso.ovh/SyntaxNation/Kristify/raw/main"
-      local tTree = filePaths
+      sURL = "https://api.github.com/repos/" .. owner .. '/' .. themeRepo .. "/contents/" .. name .. "?ref=main"
 
+      local function convertItem(item)
+        if item.type == "file" then
+          return item.name, item.download_url
+        elseif item.type == "dir" then
+          return item.name, generateTree(item.url)
+        end
+      end
+
+      local response, sErr, errResponse = http.get(sURL, authenticate)
+      httpError(response, sErr, errResponse)
+
+      local tData = getJSON(response)
+      local tTree = {}
+
+      for _, v in pairs(tData) do
+        local sName, tItem = convertItem(v)
+        -- Filter stuff that is not needed
+        if not (sName:sub(1, 1) == '.' or sName:find(".md")) then
+          tTree[sName] = tItem
+        end
+      end
       return tTree
     end
 
+    local function downloadBlob(sURL, sPath)
+      local response, sErr, errResponse = http.get(sURL, authenticate)
+      if not httpError(response, sErr, errResponse) then
+        return false
+      end
+
+      local sData = response.readAll()
+      response.close()
+
+      local blobFile = fs.open(sPath, 'w')
+      blobFile.write(sData)
+      blobFile.close()
+
+      return true
+    end
+
     local theme = generateTree(name)
-    local function downloadItems(itemPath)
+    local function downloadItems(tree, sPath)
       sleep(0.3)
 
-      for i=1, table.getn(filePaths) do
-        nextPath = fs.combine(sURL, filePaths[i])
+      for treeItemName, item in pairs(tree) do
+        local nextPath = fs.combine(sPath, treeItemName)
         if type(item) == "table" then
           downloadItems(item, nextPath)
+        else
+          downloadBlob(item, nextPath)
         end
       end
     end
@@ -148,7 +187,9 @@ elseif args[1] == "--update" or args[1] == "-u" then
     error("Holdup. How- eh whatever. You need the http API!")
   end
 
-  local response, err, errResp = http.get("https://gitbucket.fso.ovh/SyntaxNation/Kristify/raw/main/installer.lua")
+  local authenticate = _G._GIT_API_KEY and { Authorization = "Bearer " .. _G._GIT_API_KEY }
+  local response, err, errResp = http.get("https://raw.githubusercontent.com/SyntaxNationMC/kristify/main/installer.lua",
+    authenticate)
 
   if not response then
     error("Couldn't get the install script! Reason: \'" .. err .. "\' (code " .. errResp.getResponseCode() .. ')')
