@@ -131,7 +131,9 @@ function kristlyEvent(data)
   elseif data.type == "KRISTLY-ERROR" then
     error("Received kristly error: " .. data.error)
   else
-    logger:debug("Ignoring packet: " .. data.type)
+    if data ~= nil and data.type ~= nil then
+      logger:debug("Ignoring packet: " .. data.type)
+    end
   end
 end
 

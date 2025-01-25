@@ -1,5 +1,5 @@
 local installation = settings.get("kristify.path") or "kristify"
-local owner, themeRepo = "kristify", "themes"
+local owner, themeRepo = "SyntaxNationMC", "KristifyThemes"
 local args = { ... }
 
 -- Check installed version
